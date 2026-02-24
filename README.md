@@ -2,6 +2,8 @@
 
 Ваша задача развернуть лабораторную работу [webdev-lab8](https://github.com/41ISR/webdev-lab8) (можете взять как свою работу, так и готовую работу из [webdev-lab8](https://github.com/41ISR/webdev-lab7-kutikov))
 
+_Финальный эндпоинт бэка должен быть `domain.com/api`, а не `domain.com/feedback/api`_
+
 _Для получения домена и ВПСки напиши мне в телеграме_
 
 _`%yourname.example.com%` - выданный вам домен_
