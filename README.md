@@ -400,60 +400,29 @@ NODE_ENV=production
 
 ```bash
 mkdir -p swag/nginx/site-confs
-nano swag/nginx/site-confs/default.conf
+nano swag/nginx/proxy-confs/studN.conf
 ```
+
+_Вместо N номер_
 
 ```nginx
 server {
     listen 443 ssl;
-    listen [::]:443 ssl;
+    server_name САБДОМЕН.ДОМЕН.РУ;
 
-    server_name %yourname.example.com%;
-
-    # SSL-сертификаты Swag получает автоматически и управляет ими сам
     include /config/nginx/ssl.conf;
 
-    # ───────────────────────────────────────────
-    # Фронтенд — статические файлы
-    # ───────────────────────────────────────────
-
-    # Корневая папка, откуда отдаются файлы фронтенда
     root /config/www;
-    index index.html;
+    index index.html index.htm;
 
-    # Для SPA (React, Vue): NGINX ищет файл, потом папку,
-    # и если ничего не нашёл — отдаёт index.html.
-    # Так работает клиентская маршрутизация: роуты вида /about
-    # обрабатываются JavaScript в браузере, а не сервером.
     location / {
-        try_files $uri $uri/ /index.html;
-    }
-
-    # ───────────────────────────────────────────
-    # Бэкенд — проксирование API-запросов
-    # ───────────────────────────────────────────
-
-    # Все запросы на /api/... перенаправляются на бэкенд.
-    # "backend" — имя сервиса в docker-compose, он резолвится
-    # как hostname внутри Docker-сети.
-    location /api/ {
-        proxy_pass http://backend:3001;
-
-        # Передаём оригинальные заголовки запроса, чтобы бэкенд
-        # знал реальный IP клиента, а не IP Docker-сети
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        try_files $uri $uri/ =404;
     }
 }
 
-# Перенаправляем все HTTP-запросы на HTTPS
 server {
     listen 80;
-    listen [::]:80;
-
-    server_name yourname.example.com;
+    server_name САБДОМЕН.ДОМЕН.РУ;
     return 301 https://$host$request_uri;
 }
 ```
@@ -485,7 +454,9 @@ services:
       - PUID=1000             # ID пользователя системы (узнать командой: id -u)
       - PGID=1000             # ID группы (узнать: id -g)
       - TZ=Europe/Moscow      # Временная зона — для корректных меток времени в логах
-      - URL=yourname.example.com  # ВАШ поддомен — для получения SSL-сертификата
+      - URL=s1gn4l.ru  # ВАШ поддомен — для получения SSL-сертификата
+      - ONLY_SUBDOMAINS = true
+      - SUBDOMAINS="studN"
       - VALIDATION=http       # Метод подтверждения домена для Let's Encrypt
     volumes:
       # Папка с конфигами Swag: сертификаты, NGINX-конфиги.
@@ -526,7 +497,7 @@ networks:
   app-network:
     driver: bridge
 ```
-
+_Поменяйте studN на ваш номер_
 ---
 
 ## 9. Подготовка фронтенда
