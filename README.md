@@ -400,7 +400,7 @@ NODE_ENV=production
 
 ```bash
 mkdir -p swag/nginx/site-confs
-nano swag/nginx/proxy-confs/studN.conf
+nano swag/nginx/proxy-confs/studN.subdomain.conf
 ```
 
 _Вместо N номер_
